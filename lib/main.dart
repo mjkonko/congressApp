@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:polish_congress_app/agenda.dart';
+import 'package:polish_congress_app/contact.dart';
+import 'package:polish_congress_app/map.dart';
+import 'package:polish_congress_app/start.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,10 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Congress App',
       theme: ThemeData(
-        //todo: 731731 from webpage
-        primarySwatch: Colors.purple,
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red).copyWith(secondary: Colors.redAccent)
       ),
-      home: MyHomePage(title: '15th Polish Congress'),
+      home: MyHomePage(title: 'XV Polish Congress'),
     );
   }
 }
@@ -45,36 +47,42 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        flexibleSpace: Container(
+          decoration:
+          BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('lib/assets/images/congress_bgd.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
         bottom: TabBar(
           controller: _tabController,
           tabs: <Widget>[
             Tab(
               icon: Icon(Icons.cloud_outlined),
-              text: "Congress",
+              text: "News",
             ),
             Tab(
               icon: Icon(Icons.calendar_today),
               text: "Agenda",
             ),
             Tab(
+              icon: Icon(Icons.pin_drop_outlined),
+              text: "Map",
+            ),
+            Tab(
               icon: Icon(Icons.contact_support),
-              text: "Contact us",
+              text: "About Us",
             ),
           ],
         ),
@@ -83,13 +91,16 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           controller: _tabController,
           children: <Widget>[
             Center(
-              child: Text('main')
+              child: Start(title: 'News')
             ),
             Center(
               child: Agenda(title: 'Agenda')
             ),
             Center(
-              child: Text('contact')
+              child: Map(title: 'Map')
+            ),
+            Center(
+              child: Contact(title: 'About Us')
             )
           ],
       ),

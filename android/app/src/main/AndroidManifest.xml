@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.polishcongress.congressApp.polish_congress_app">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="polish_congress_app"
         android:icon="@mipmap/ic_launcher">
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyCZIo7LIyZv0sM8wEPZkUmBh1tqFnX1XB0" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

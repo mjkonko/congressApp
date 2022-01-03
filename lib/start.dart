@@ -1,36 +1,38 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:polish_congress_app/globals.dart';
-import 'package:polish_congress_app/entity/AgendaItem';
+import 'package:polish_congress_app/entity/User.dart';
+
+import 'entity/NewsItem.dart';
 
 
-class Agenda extends StatefulWidget {
-  Agenda({Key? key, required this.title}) : super(key: key);
+class Start extends StatefulWidget {
+  Start({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _AgendaState createState() => _AgendaState();
+  _StartState createState() => _StartState();
 
-  }
+}
 
 
-class _AgendaState extends State<Agenda> with TickerProviderStateMixin {
-  late Future<List<AgendaItem>> agenda;
+class _StartState extends State<Start> with TickerProviderStateMixin {
+  late Future<List<NewsItem>> news;
+
 
   @override
   void initState(){
     super.initState();
-    agenda = fetchAgenda();
+    news = fetchNews();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<AgendaItem>>(
-      future: agenda,
+    return FutureBuilder<List<NewsItem>>(
+      future: news,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           ListView.builder(
@@ -44,8 +46,9 @@ class _AgendaState extends State<Agenda> with TickerProviderStateMixin {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(currentItem.name),
-                    Text(currentItem.time),
+                    Text(currentItem.title),
+                    Text(currentItem.body),
+                    Text(currentItem.time)
                   ],
                 ),
               );
@@ -60,21 +63,20 @@ class _AgendaState extends State<Agenda> with TickerProviderStateMixin {
     );
   }
 
-
-  Future<List<AgendaItem>> fetchAgenda() async {
-    final response = await http.get(Uri.parse(Globals().getAgendaUrl()));
-
+  Future<List<NewsItem>> fetchNews() async {
+    final response = await http.get(Uri.parse(Globals().getNewsUrl()));
     if (response.statusCode == 200) {
-      print(response.body);
+      //print(response.body);
 
       // If the server did return a 200 OK response,
       // then parse the JSON.
       Iterable l = json.decode(response.body);
-      return List<AgendaItem>.from(l.map((model)=> AgendaItem.fromJson(model)));
+      return List<NewsItem>.from(l.map((model)=> NewsItem.fromJson(model)));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load agenda item');
+      throw Exception('Failed to load news item');
     }
   }
 }
+
