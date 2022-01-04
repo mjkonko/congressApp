@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:polish_congress_app/globals.dart';
-import 'package:polish_congress_app/entity/User.dart';
 
 import 'entity/NewsItem.dart';
 
