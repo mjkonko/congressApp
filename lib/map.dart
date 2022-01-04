@@ -14,15 +14,6 @@ class Map extends StatefulWidget {
 
 
 class _MapState extends State<Map> with TickerProviderStateMixin {
-  Set<Marker> _markers = {
-    Marker(
-      markerId: MarkerId('ox-uni-bodleian-1'),
-      position: LatLng(51.754080003007374, -1.254038230794133),
-      infoWindow: InfoWindow(
-        title: 'Oxford University: Bodleian Library'
-      )
-    ),
-  };
 
   @override
   void initState(){
@@ -37,7 +28,7 @@ class _MapState extends State<Map> with TickerProviderStateMixin {
                           target: LatLng(51.752022, -1.257677 ),
                           zoom: 14
                         ),
-        markers: _markers,
+        markers: Utilities._markers,
         onMapCreated: (GoogleMapController controller) => setState(() {
           controller.setMapStyle(Utilities.mapStyleJson);
         })
@@ -48,6 +39,16 @@ class _MapState extends State<Map> with TickerProviderStateMixin {
 }
 
 class Utilities{
+  static Set<Marker> _markers = {
+    Marker(
+        markerId: MarkerId('ox-uni-bodleian-1'),
+        position: LatLng(51.754080003007374, -1.254038230794133),
+        infoWindow: InfoWindow(
+            title: 'Oxford University: Bodleian Library'
+        )
+    ),
+  };
+
   static String mapStyleJson = '''
   [
   {
