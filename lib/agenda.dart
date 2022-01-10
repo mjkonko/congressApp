@@ -53,7 +53,7 @@ class AgendaList extends StatelessWidget {
   final List<AgendaItem> agenda;
 
   Card makeCard(AgendaItem item) => Card(
-    elevation: 8.0,
+    elevation: 10.0,
     margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
     child: Container(
       decoration: BoxDecoration(color: Color.fromRGBO(61, 58, 58, 0.6)),
@@ -63,7 +63,7 @@ class AgendaList extends StatelessWidget {
 
   ListTile makeListTile(AgendaItem item) => ListTile(
     contentPadding:
-    EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+    EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
     leading: Container(
       padding: EdgeInsets.only(right: 12.0),
       decoration: new BoxDecoration(
@@ -81,7 +81,7 @@ class AgendaList extends StatelessWidget {
         Expanded(
           flex: 4,
           child: Padding(
-              padding: EdgeInsets.only(left: 10.0),
+              padding: EdgeInsets.only(left: 0.0, top: 9.0),
               child: Text(DateTime.parse(item.time).toLocal().toString(),
                   style: TextStyle(color: Colors.white))),
         )
