@@ -57,7 +57,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title, style: TextStyle(fontWeight: FontWeight.w200, fontSize: 17.5)),
+        toolbarHeight: 22.0,
         flexibleSpace: Container(
           decoration:
           BoxDecoration(
@@ -70,6 +71,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         backgroundColor: Colors.transparent,
         bottom: TabBar(
           controller: _tabController,
+          indicatorWeight: 1.5,
+          automaticIndicatorColorAdjustment: true,
+          indicatorColor: Color.fromRGBO(255, 255, 255, 1.0),
+
           tabs: <Widget>[
             Tab(
               icon: Icon(Icons.cloud_outlined),
