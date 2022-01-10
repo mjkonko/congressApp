@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:polish_congress_app/globals.dart';
@@ -17,64 +17,110 @@ class Agenda extends StatefulWidget {
 
   }
 
-
 class _AgendaState extends State<Agenda> with TickerProviderStateMixin {
-  late Future<List<AgendaItem>> agenda;
-
   @override
   void initState(){
     super.initState();
-    agenda = fetchAgenda();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<AgendaItem>>(
-      future: agenda,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          ListView.builder(
-            itemCount: snapshot.data!.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              var currentItem = snapshot.data![index];
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 100),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(currentItem.name),
-                    Text(currentItem.time),
-                  ],
-                ),
-              );
-            },
-          );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-        // By default, show a loading spinner.
-        return const CircularProgressIndicator();
+    return Scaffold(
+        body: FutureBuilder<List<AgendaItem>>(
+                future: fetchAgenda(http.Client()),
+                builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      print(snapshot.error.toString());
+                      return const Center(
+                        child: Text('An error has occurred!'),
+                      );
+                    } else if (snapshot.hasData) {
+                      return AgendaList(agenda: snapshot.data!);
+                    } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+              )
+    );
+  }
+}
+
+class AgendaList extends StatelessWidget {
+  const AgendaList({Key? key, required this.agenda}) : super(key: key);
+
+  final List<AgendaItem> agenda;
+
+  Card makeCard(AgendaItem item) => Card(
+    elevation: 8.0,
+    margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+    child: Container(
+      decoration: BoxDecoration(color: Color.fromRGBO(61, 58, 58, 0.6)),
+      child: makeListTile(item),
+    ),
+  );
+
+  ListTile makeListTile(AgendaItem item) => ListTile(
+    contentPadding:
+    EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+    leading: Container(
+      padding: EdgeInsets.only(right: 12.0),
+      decoration: new BoxDecoration(
+          border: new Border(
+              right: new BorderSide(width: 1.0, color: Colors.white24))),
+      child: Icon(Icons.event, color: Colors.white),
+    ),
+    title: Text(
+      item.name,
+      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+    ),
+
+    subtitle: Row(
+      children: <Widget>[
+        Expanded(
+          flex: 4,
+          child: Padding(
+              padding: EdgeInsets.only(left: 10.0),
+              child: Text(DateTime.parse(item.time).toLocal().toString(),
+                  style: TextStyle(color: Colors.white))),
+        )
+      ],
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: agenda.length,
+      itemBuilder: (context, index) {
+        return makeCard(agenda[index]);
       },
     );
   }
+}
 
+Future<List<AgendaItem>> fetchAgenda(http.Client client) async {
+  final response = await client.get(Uri.parse(Globals().getAgendaUrl()));
 
-  Future<List<AgendaItem>> fetchAgenda() async {
-    final response = await http.get(Uri.parse(Globals().getAgendaUrl()));
+  if (response.statusCode == 200) {
+    print(response.body);
 
-    if (response.statusCode == 200) {
-      print(response.body);
-
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      Iterable l = json.decode(response.body);
-      return List<AgendaItem>.from(l.map((model)=> AgendaItem.fromJson(model)));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load agenda item');
-    }
+    return compute(parseAgenda, response.body.toString());
+  } else {
+    throw Exception('Failed to load agenda item');
   }
 }
+
+List<AgendaItem> parseAgenda(String responseBody) {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
+  return parsed.map<AgendaItem>((json) => AgendaItem.fromJson(json)).toList();
+}
+
+class Utilities {
+  String getSpeaker(int id) {
+    return '';
+  }
+}
+

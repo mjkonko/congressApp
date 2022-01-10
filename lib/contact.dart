@@ -42,7 +42,7 @@ class _ContactState extends State<Contact> with TickerProviderStateMixin {
                   child: Text("Contact the Team",
                       style: TextStyle(
                           fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center),
+                          textAlign: TextAlign.center),
                 ),
                 Text(data, textAlign: TextAlign.center),
                 Center(

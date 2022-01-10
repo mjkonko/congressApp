@@ -30,4 +30,12 @@ class Globals{
     return getApiUrl() + _API_URL_USER + "/" + id + "/";
   }
 
+   String getSpeaker(String id){
+    return getApiUrl() + _API_URL_USER + "/" + id + "/";
+  }
+
+   String getVenue(String id){
+    return getApiUrl() + _API_URL_USER + "/" + id + "/";
+  }
+
 }

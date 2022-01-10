@@ -30,42 +30,44 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<NewsItem>>(
-      future: news,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          ListView.builder(
-            itemCount: snapshot.data!.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              var currentItem = snapshot.data![index];
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 100),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(currentItem.title),
-                    Text(currentItem.body),
-                    Text(currentItem.time)
-                  ],
-                ),
-              );
-            },
-          );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-        // By default, show a loading spinner.
-        return const CircularProgressIndicator();
-      },
+    return Scaffold(
+        body: FutureBuilder<List<NewsItem>>(
+                future: news,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        var currentItem = snapshot.data![index];
+                        return Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 100),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(currentItem.title),
+                              Text(currentItem.body),
+                              Text(currentItem.time)
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                },
+              )
     );
   }
 
   Future<List<NewsItem>> fetchNews() async {
     final response = await http.get(Uri.parse(Globals().getNewsUrl()));
     if (response.statusCode == 200) {
-      //print(response.body);
+      print(response.body);
 
       // If the server did return a 200 OK response,
       // then parse the JSON.

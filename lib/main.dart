@@ -15,7 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Congress App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red).copyWith(secondary: Colors.redAccent)
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red).copyWith(secondary: Colors.redAccent),
+          scaffoldBackgroundColor: Color.fromRGBO(106, 32, 32, 1.0),
+          focusColor: Color.fromRGBO(220, 220, 220, 1.0),
+          fontFamily: ''
       ),
       home: MyHomePage(title: 'XV Polish Congress'),
     );
