@@ -3,8 +3,12 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:polish_congress_app/globals.dart';
+import 'package:polish_congress_app/globals.dart' as global;
 import 'package:polish_congress_app/entity/AgendaItem';
+
+import 'entity/SpeakerItem.dart';
+import 'entity/VenueItem.dart';
+import 'globals.dart';
 
 
 class Agenda extends StatefulWidget {
@@ -81,9 +85,60 @@ class AgendaList extends StatelessWidget {
         Expanded(
           flex: 4,
           child: Padding(
-              padding: EdgeInsets.only(left: 0.0, top: 9.0),
+              padding: EdgeInsets.only(left: 0.0, top: 9.0, right: 0.0),
               child: Text(DateTime.parse(item.time).toLocal().toString(),
-                  style: TextStyle(color: Colors.white))),
+                  style: TextStyle(color: Colors.white)),
+          ),
+        ),
+        Expanded(
+          flex: 4,
+          child: Padding(
+              padding: EdgeInsets.only(left: 0.0, top: 9.0, right: 0.0),
+              child: FutureBuilder<String>(
+                future: fetchSpeaker(item.speaker.toString()),
+                builder:
+                  (context, snapshot) {
+                    if (snapshot.hasError) {
+                      print(snapshot.error.toString());
+                      return const Center(
+                        child: Text('An error has occurred!'),
+                      );
+                    } else if (snapshot.hasData) {
+                      return Text(snapshot.data!);
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+              )
+
+          ),
+        ),
+        Expanded(
+          flex: 4,
+          child: Padding(
+              padding: EdgeInsets.only(left: 0.0, top: 9.0, right: 0.0),
+              child: FutureBuilder<String>(
+                future: fetchVenue(item.venue.toString()),
+                builder:
+                  (context, snapshot) {
+                    if (snapshot.hasError) {
+                      print(snapshot.error.toString());
+                      return const Center(
+                        child: Text('An error has occurred!'),
+                      );
+                    } else if (snapshot.hasData) {
+                      return Text(snapshot.data!);
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+              )
+
+          ),
         )
       ],
     ),
@@ -118,9 +173,31 @@ List<AgendaItem> parseAgenda(String responseBody) {
   return parsed.map<AgendaItem>((json) => AgendaItem.fromJson(json)).toList();
 }
 
-class Utilities {
-  String getSpeaker(int id) {
-    return '';
+Future<String> fetchSpeaker(String id) async{
+  final response = await http.get(
+      Uri.parse(Globals().getSpeaker(id))
+  );
+  if (response.statusCode == 200) {
+    var res = json.decode(response.body);
+
+    return SpeakerItem.fromJson(res).name;
+  } else {
+    // show error
+    throw new Exception("Failed to fetch speaker " + id);
   }
 }
+Future<String> fetchVenue(String id) async{
+  final response = await http.get(
+      Uri.parse(Globals().getVenue(id))
+  );
+  if (response.statusCode == 200) {
+    var res = json.decode(response.body);
+
+    return VenueItem.fromJson(res).name;
+  } else {
+    // show error
+    throw new Exception("Failed to fetch venue " + id);
+  }
+}
+
 
