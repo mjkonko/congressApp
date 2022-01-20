@@ -97,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
       body: TabBarView(
           controller: _tabController,
+          physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
             Center(
               child: Start(title: 'News')

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -54,6 +55,15 @@ class NewsList extends StatelessWidget {
 
   final List<NewsItem> list;
 
+  Text parseDT(DateTime dt) => Text(
+      dt.day.toString() + "/" + dt.month.toString() + " " + DateFormat('hh:mm').format(dt),
+      style: TextStyle(color: Colors.white,
+          fontWeight: FontWeight.w200,
+          fontSize: 8,
+          letterSpacing: 1.5
+      )
+  );
+
   Card makeCard(NewsItem item) => Card(
     elevation: 10.0,
     margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
@@ -78,23 +88,42 @@ class NewsList extends StatelessWidget {
       style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
     ),
 
-    subtitle: Row(
+    subtitle:
+    Column(
       children: <Widget>[
-        Expanded(
-          flex: 4,
-          child: Padding(
-              padding: EdgeInsets.only(left: 0.0, top: 9.0),
-              child: Text(item.body,
-                  style: TextStyle(color: Colors.white))),
+        Row(
+          children: <Widget>[
+            Expanded(
+              flex: 4,
+              child: Padding(
+                  padding: EdgeInsets.only(left: 0.0, top: 9.0),
+                  child: Text(item.body,
+                      style: TextStyle(color: Colors.white))),
+            )
+          ],
+        ),
+          Row(
+            children: <Widget>[
+              Expanded(
+              flex: 4,
+              child: Padding(
+                  padding: EdgeInsets.only(left: 0.0, top: 9.0),
+                  child: parseDT(DateTime.parse(item.time))
+              )
+            )
+          ]
         )
-      ],
-    ),
+      ]
+    )
   );
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: list.length,
+      shrinkWrap: true,
+      reverse: true,
+      cacheExtent: 30.0,
       itemBuilder: (context, index) {
         return makeCard(list[index]);
       },
@@ -103,20 +132,23 @@ class NewsList extends StatelessWidget {
 }
 
 Future<List<NewsItem>> fetchNews(http.Client client) async {
-  final response = await client.get(Uri.parse(Globals().getNewsUrl()));
+  final response = await client.get(Uri.parse(Globals().getNewsUrl()),
+      headers: {
+        'Accept': 'application/json; charset=UTF-8'
+      });
 
   if (response.statusCode == 200) {
-    print(response.body);
-
-    return compute(parseNews, response.body.toString());
+    return compute(parseNews, response.bodyBytes.toList());
   } else {
     throw Exception('Failed to load news items');
   }
 }
 
-List<NewsItem> parseNews(String responseBody) {
-  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+List<NewsItem> parseNews(List<int> responseBytes) {
+  final parsed = jsonDecode(utf8.decode(responseBytes)).cast<Map<String, dynamic>>();
 
-  return parsed.map<NewsItem>((json) => NewsItem.fromJson(json)).toList();
+  List<NewsItem> list = parsed.map<NewsItem>((json) => NewsItem.fromJson(json)).toList();
+  list.sort((item1, item2) => item1.id.compareTo(item2.id));
+  return list;
 }
 
