@@ -48,7 +48,10 @@ flutter:
 
   # To add assets to your application:
   assets:
-  - lib/assets/images/
+  - lib/assets/images/congress_bgd.png
+  - lib/assets/images/congress_logo.jpg
+  - lib/assets/images/icon_team.png
+  - lib/assets/images/icon_venues.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

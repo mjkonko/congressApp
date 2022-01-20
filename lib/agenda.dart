@@ -58,9 +58,8 @@ class AgendaList extends StatelessWidget {
   final List<AgendaItem> agenda;
 
   Text parseDT(DateTime dt) => Text(
-      dt.day.toString() + "/" + dt.month.toString()
-        + " starting @ " + DateFormat('HH:mm').format(dt)
-        + " " + dt.timeZoneName,
+      DateFormat('dd/MM/yyyy').format(dt)
+        + " " + DateFormat('HH:mm').format(dt),
       style: TextStyle(color: Colors.white,
           fontWeight: FontWeight.bold,
           backgroundColor: Color.alphaBlend(Color.fromRGBO(255, 32, 32, 0.2), Color.fromRGBO(106, 32, 32, 0.6)),
@@ -82,10 +81,24 @@ class AgendaList extends StatelessWidget {
     EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
     subtitle: Column(
       children: <Widget>[
+        Divider(
+          color: Colors.white,
+          height: 20,
+          thickness: 0.5,
+          indent: 10,
+          endIndent: 10,
+        ),
         Padding(
               padding: EdgeInsets.only(left: 0.0, top: 1.0, right: 0.0),
               child: parseDT(DateTime.parse(item.time)),
               ),
+        Divider(
+          color: Colors.white,
+          height: 20,
+          thickness: 0.5,
+          indent: 10,
+          endIndent: 10,
+        ),
         Row(
           children: <Widget>[
             Expanded(
@@ -125,7 +138,7 @@ class AgendaList extends StatelessWidget {
             Expanded(
               child:
                 Padding(
-                    padding: EdgeInsets.only(left: 16.0, top: 20.0, right: 0.0),
+                    padding: EdgeInsets.only(left: 30.0, top: 20.0, right: 0.0),
                     child: FutureBuilder<String>(
                       future: fetchVenue(item.venue.toString()),
                       builder:
@@ -158,12 +171,19 @@ class AgendaList extends StatelessWidget {
             )
           ],
         ),
+        Divider(
+          color: Colors.white,
+          height: 10,
+          thickness: 0.5,
+          indent: 10,
+          endIndent: 10,
+        ),
         Row(
           children:[
             Flexible(
               child:
                 Padding(
-                    padding: EdgeInsets.only(left: 8.0, top: 5.0, right: 8.0),
+                    padding: EdgeInsets.only(left: 8.0, top: 20.0, right: 8.0),
                     child: Text(item.description,
                                   softWrap: true,
                                   style: TextStyle(
@@ -176,7 +196,14 @@ class AgendaList extends StatelessWidget {
               fit: FlexFit.loose,
             )
           ]
-        )
+        ),
+        Divider(
+          color: Colors.white,
+          height: 40,
+          thickness: 0.5,
+          indent: 10,
+          endIndent: 10,
+        ),
       ],
     ),
   );
