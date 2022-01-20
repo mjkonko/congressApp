@@ -28,6 +28,7 @@ class _MapState extends State<Map> with TickerProviderStateMixin {
                           target: LatLng(51.752022, -1.257677 ),
                           zoom: 14
                         ),
+        myLocationEnabled: true,
         markers: Utilities._markers,
         onMapCreated: (GoogleMapController controller) => setState(() {
           controller.setMapStyle(Utilities.mapStyleJson);
@@ -41,12 +42,46 @@ class _MapState extends State<Map> with TickerProviderStateMixin {
 class Utilities{
   static Set<Marker> _markers = {
     Marker(
-        markerId: MarkerId('ox-uni-bodleian-1'),
-        position: LatLng(51.754080003007374, -1.254038230794133),
+        markerId: MarkerId('ox-uni-edmunds-1'),
+        position: LatLng(51.75317160515247, -1.2499625439266937),
         infoWindow: InfoWindow(
-            title: 'Oxford University: Bodleian Library'
+            title: 'Oxford University: St. Edmund Hall',
+            snippet: 'Friday Formal Venue'
         )
     ),
+    Marker(
+        markerId: MarkerId('ox-town-hall-1'),
+        position: LatLng(51.751690843836684, -1.2571250844111337),
+        infoWindow: InfoWindow(
+            title: 'Oxford Town Hall',
+            snippet: 'Saturday Ball Venue'
+        )
+    ),
+    Marker(
+        markerId: MarkerId('ox-uni-museum-nathist-1'),
+        position: LatLng(51.758822515315714, -1.2555313746070507),
+        infoWindow: InfoWindow(
+            title: 'Oxford University Museum of Natural History',
+            snippet: 'Friday Social Venue'
+        )
+    ),
+    Marker(
+        markerId: MarkerId('ox-uni-ex-schools-1'),
+        position: LatLng(51.75245112312048, -1.2499640285864282),
+        infoWindow: InfoWindow(
+            title: 'Oxford Town Hall',
+            snippet: 'Saturday Day Events\' Venue'
+        )
+    ),
+    Marker(
+        markerId: MarkerId('ox-sheldonian-thre-1'),
+        position: LatLng(51.754435409975734, -1.2549810439266371),
+        infoWindow: InfoWindow(
+            title: 'Sheldonian Theatre',
+            snippet: 'Friday Day Events\' Venue'
+        )
+    ),
+
   };
 
   static String mapStyleJson = '''
