@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,14 +38,6 @@ class _ContactState extends State<Contact> with TickerProviderStateMixin {
           alignment: Alignment.center,
           child :Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text("Contact the Team",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center),
-                ),
-                Text(data, textAlign: TextAlign.center),
                 Center(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,28 +45,60 @@ class _ContactState extends State<Contact> with TickerProviderStateMixin {
                     children: [
                       IconButton(
                         // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                          icon: FaIcon(FontAwesomeIcons.instagramSquare),
+                          icon: FaIcon(FontAwesomeIcons.instagramSquare, color: Colors.white),
                           iconSize: 50,
                           onPressed: () { _launchURL('https://www.instagram.com/congressofplstudents/'); }
                       ),
                       IconButton(
                         // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                          icon: FaIcon(FontAwesomeIcons.facebookMessenger),
+                          icon: FaIcon(FontAwesomeIcons.facebookMessenger, color: Colors.white),
                           iconSize: 50,
                           onPressed: () { _launchURL('http://m.me/congressofpolishstudentsocieties/'); }
                       ),
                     ],
                   )
-                  // ROZBUDOWA: partnerzy - ikonki
+                ),
+                Expanded(
+                    child:
+                        GridView(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1,
+                          ),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          children: [
+                                _buildCard("lib/assets/images/","https://polishcongress.com/about"), // ABOUT
+                                _buildCard('lib/assets/images/icon_venues.png',"https://www.polishcongress.com/suggested-venues"), // FOOD
+                                _buildCard("lib/assets/images/icon_team.png","https://polishcongress.com/the-congress-crew"), // TEAM
+                                _buildCard("lib/assets/images/","https://polishcongress.com/contact-us")  // CONTACT
+                            ]
+                      )
                 )
             ]
           )
-    )
+        )
     );
   }
 
   void _launchURL(String url) async {
     if (!await launch(url)) throw 'Could not launch $url';
+  }
+
+  Card _buildCard(img, url) {
+    return Card(
+        child:
+            InkWell(
+              onTap: () {
+                _launchURL(url);
+              },
+              child: Container(
+                width: 200.0,
+                height: 200.0,
+                child: Image(image: AssetImage(img)),
+              ),
+            ),
+        );
   }
 
 }

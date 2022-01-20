@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Congress App',
       theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red).copyWith(secondary: Colors.redAccent),
-          scaffoldBackgroundColor: Color.fromRGBO(106, 32, 32, 1.0),
+          scaffoldBackgroundColor: Color.fromRGBO(146, 7, 48, 1.0),
           focusColor: Color.fromRGBO(220, 220, 220, 1.0),
           fontFamily: ''
       ),

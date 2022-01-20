@@ -68,7 +68,7 @@ class NewsList extends StatelessWidget {
     elevation: 10.0,
     margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
     child: Container(
-      decoration: BoxDecoration(color: Color.fromRGBO(61, 58, 58, 0.6)),
+      decoration: BoxDecoration(color: Color.fromRGBO(61, 58, 58, 0.48)),
       child: makeListTile(item),
     ),
   );
