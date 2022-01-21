@@ -15,11 +15,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Congress App',
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red).copyWith(secondary: Colors.redAccent),
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
+              .copyWith(secondary: Colors.redAccent),
           scaffoldBackgroundColor: Color.fromRGBO(146, 7, 48, 1.0),
           focusColor: Color.fromRGBO(220, 220, 220, 1.0),
-          fontFamily: ''
-      ),
+          fontFamily: ''),
       home: MyHomePage(title: 'XV Polish Congress'),
     );
   }
@@ -44,7 +44,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-
   late TabController _tabController;
 
   @override
@@ -57,11 +56,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title, style: TextStyle(fontWeight: FontWeight.w200, fontSize: 17.5)),
+        title: Text(widget.title,
+            style: TextStyle(fontWeight: FontWeight.w200, fontSize: 17.5)),
         toolbarHeight: 22.0,
         flexibleSpace: Container(
-          decoration:
-          BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('lib/assets/images/congress_bgd.png'),
               fit: BoxFit.cover,
@@ -74,7 +73,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           indicatorWeight: 1.5,
           automaticIndicatorColorAdjustment: true,
           indicatorColor: Color.fromRGBO(255, 255, 255, 1.0),
-
           tabs: <Widget>[
             Tab(
               icon: Icon(Icons.cloud_outlined),
@@ -90,28 +88,20 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             ),
             Tab(
               icon: Icon(Icons.contact_support),
-              text: "About Us",
+              text: "Info",
             ),
           ],
         ),
       ),
       body: TabBarView(
-          controller: _tabController,
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            Center(
-              child: Start(title: 'News')
-            ),
-            Center(
-              child: Agenda(title: 'Agenda')
-            ),
-            Center(
-              child: Map(title: 'Map')
-            ),
-            Center(
-              child: Contact(title: 'About Us')
-            )
-          ],
+        controller: _tabController,
+        physics: NeverScrollableScrollPhysics(),
+        children: <Widget>[
+          Center(child: Start(title: 'News')),
+          Center(child: Agenda(title: 'Agenda')),
+          Center(child: Map(title: 'Map')),
+          Center(child: Contact(title: 'Info'))
+        ],
       ),
     );
   }
